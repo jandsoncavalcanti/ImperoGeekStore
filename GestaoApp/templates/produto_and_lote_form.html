@@ -1,0 +1,67 @@
+{% extends 'menu.html' %}
+{% block forms %}
+	<form method="POST" class="form-signin">{% csrf_token %}
+    {% if subform and '/lote/' in request.get_full_path %}
+      <a href="{% url 'lista_lote' %}"><button type="button" class="btn btn-lg btn-primary">Lista</button></a>
+      <a href="{% url 'novo_lote' %}"><button type="button" class="btn btn-lg btn-primary">Cadastro</button></a>
+    {% endif %}
+    {% if form %}
+      {%if '/produto/' in request.get_full_path %}
+        <a href="{% url 'lista_produto' %}"><button type="button" class="btn btn-lg btn-primary">Lista</button></a>
+        <a href="{% url 'novo_produto' %}"><button type="button" class="btn btn-lg btn-primary">Cadastro</button></a>
+      {% endif %}
+      <div class="panel panel-primary" style="max-width: 100%; width: 500px; margin: 0 auto;">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{ header_text }}</h3>
+        </div>
+        <div class="panel-body">
+            {{ form.descricao }}
+            {{ form.franquia }}
+            {{ form.categoria }}
+            {% if not subform %}
+              <input type="submit" value="Concluir" class='btn btn-primary btn-lg' style="float: right; margin-top: 10px;">
+            {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if subform and '/lote/' == request.get_full_path %}
+      <div class="panel panel-primary" style="max-width: 100%; width: 500px; margin: 0 auto;">
+        <div class="panel-heading">
+          <h3 class="panel-title">Selecione o produto relacionado ao Lote</h3>
+        </div>
+        <div class="panel-body">
+          {{ subform.categoria }}
+          {{ subform.franquia }}
+          {{ subform.produto }}
+          {{ subform.produtoedit }}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if subform %}
+      <div class="panel panel-primary" style="max-width: 100%; width: 500px; margin: 0 auto; margin-top: 20px;">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{ subheader_text }}</h3>
+        </div>
+        <div class="panel-body">
+          {{ subform.valorvendaunitario }}
+          {{ subform.valorcompraunitario }}
+          {{ subform.quantidadetotal }}
+          {{ subform.custoTotal }}
+          <input type="submit" value="Concluir" class='btn btn-primary btn-lg' style="float: right; margin-top: 10px;">
+        </div>
+      </div>
+      {% comment %}
+      <div style="width: 100%; float: left; text-align: center;">
+        <h4 id="lucro_unidade">Lucro sobre unidade:</h4>
+        <h4 id="lucro_total">Lucro sobre lote:</h4>
+      </div>
+      {% endcomment %}
+    {% endif %}
+  </form>
+  <script type="text/javascript" src="/static/js/custos_autocomplete.js"></script>
+  {% if not form %}
+    <script type="text/javascript" src="/static/js/subform_autocomplete.js"></script>
+  {% endif %}
+{% endblock %}

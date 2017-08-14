@@ -1,0 +1,131 @@
+body {
+  width: 100vw;
+  background-color: #eee;
+}
+
+@font-face {
+  font-family: "caprice";
+  src: url("../font/caprice/Caprice.otf");
+  font-weight: normal;
+  font-style: normal; 
+}
+/*CUTOM-INICIO*/
+
+span.select2.select2-container.select2-container--default {
+  max-width: 100%;
+  min-width: 100%;
+  margin-top: 10px;
+}
+
+span.select2-selection.select2-selection--single:focus {
+  border-color: #66afe9 !important;
+  outline: 0 !important;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6) !important;
+}
+
+input.select2-search__field {
+  border-color: #66afe9 !important;
+  outline: 0 !important;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6) !important;
+  font-size: 16px;
+}
+
+span.select2-selection.select2-selection--single {
+  display: block;
+  height: 40px;
+}
+
+span.select2-selection__rendered {
+  display: block;
+  margin-top: 5px;
+}
+
+span.select2-selection__placeholder {
+  font-size: 16px;
+}
+
+.mainlogo {
+	float:left;
+  margin-top: -15px;
+  margin-left: -15px;
+  margin-right: -15px;
+  width: 100px;
+  height: 50px;
+}
+
+.index-logo {
+  height: 75px;
+  width: 75px;
+}
+/*CUTOM-FIM*/
+.form-signin {
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+
+/* Padding for spacing */
+.inner {
+  padding: 30px;
+}
+
+/*
+ * Affix and center
+ */
+
+@media (min-width: 768px) {
+  /* Pull out the header and footer */
+  .mastfoot {
+    position: fixed;
+    bottom: 0;
+    
+  }
+}
+
+.btn-primary {
+  background-image: linear-gradient(to bottom,#337ab7 0,#265a88 100%) !important;
+}
+
+.panel-primary>.panel-heading {
+  background-image: linear-gradient(to bottom,#337ab7 0,#2e6da4 100%) !important;
+  background-repeat: repeat-x !important;
+}
+
+iframe, object, embed {
+    max-width: 100%;
+    margin-top: 20px;
+}
+
+.modal {
+  text-align: center;
+  padding: 0!important;
+}
+
+.modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}

@@ -1,0 +1,111 @@
+{% extends 'header.html' %}
+{% load extras %}
+{% block conteudo %}
+  <div class="masthead" style="padding-top: 10px;">
+    <nav>
+      <ul class="nav nav-justified" style="float: left; max-width: 250px;">
+        <li><a href="{% url 'vendas' %}">Lista</a></li>
+        <li><a href="{% url 'novo_venda' %}">Cadastro</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div style="float: left; width: 100%">
+  	<h1 >VENDA</h1>
+  	<form method="POST">{% csrf_token %}
+      <div style="width: 100%; margin: 0 auto;">
+        {% if clienteSearch_form %}
+      		<div style="text-align: center; margin-top: 20px;">
+      			Nome:{{ clienteSearch_form.nome }}
+            <input type="submit" value="venda para cliente" class="btn btn-primary"><br>
+            {% if messages %}
+              {% for message in messages %}
+                <font style="font-size: 25px;">{{ message }}</font>
+              {% endfor %}
+              <br>
+            {% endif %}
+            <div style="margin-top: 20px;">
+              <a href="{% url 'venda_avulsa' %}" class='btn btn-primary'>venda avulsa</a>
+              <a href="{% url 'venda_novo_cliente' %}" class='btn btn-primary'>venda para novo cliente</a>
+            </div>
+      		</div>
+        {% elif cliente_form %}
+          <div class="general-input" style="text-align: center; margin-top: 20px;">
+            Nome: {{ cliente_form.nome }}
+            {{ cliente_form.nome.errors.as_text }}
+            Telefone: {{ cliente_form.telefone }}
+            {{ cliente_form.telefone.errors.as_text }}
+          </div>
+        {% endif %}
+        {% if venda_form %}
+        <div style="text-align: center; margin-top: 50px;">
+          {% if not viewMode %}
+            produto:{{ venda_form.produto }}
+            {{ venda_form.quantidade }}
+            <button type="button" onclick="adicionar()" class='btn btn-primary'>adicionar</button>
+          {% endif %}
+          <input type="hidden" id="lotevenda_list" name="lotevenda_list" value="{{ lotevenda_list }}">
+          <input type="hidden" id="produto_valor">
+          <input type="hidden" id="maximo">
+          <br>
+          <div id="message"></div>
+          <table id="tabela" class="table table-bordered" style="margin-top: 50px;">
+              <tr><td>Não há produtos adicionados</td></tr>
+          </table>
+          <font style="font-size: 30px;">Valor total: </font>
+          <font id="valor_total" style="font-size: 30px;">0,00</font>
+        </div>
+          <fieldset style="display: block; margin:auto; width: 250px; padding-left: 2em; padding-right: 2em; padding-bottom: 20px;
+           border: 2px solid rgb(0,0,0);">
+          <legend style="border: 2px solid rgb(0,0,0);">Pagamento</legend>
+          <div class="general-input">
+            Crédito: {{ venda_form.valorCredito }}
+            {{ venda_form.valorCredito.errors.as_text }}
+            <br>
+          </div>
+          <div class="general-input">
+            Parcelas: {{ venda_form.parcelas }}
+            {{ venda_form.parcelas.errors.as_text }}
+            <br>
+          </div>
+          <div class="general-input">
+            Débito: {{ venda_form.valorDeito }}
+            {{ venda_form.valorDeito.errors.as_text }}
+            <br>
+          </div>
+          <div class="general-input">
+            Moeda: {{ venda_form.valorMoeda }}
+            {{ venda_form.valorMoeda.errors.as_text }}
+            <br>
+          </div>
+          </fieldset>
+          <fieldset style="display: block; margin: 20px auto; width: 275px; padding-left: 2em; padding-right: 2em; padding-bottom: 20px;
+           border: 2px solid rgb(0,0,0);">
+          <legend style="border: 2px solid rgb(0,0,0);">Desconto</legend>
+            <div class="general-input">
+              Valor: {{ venda_form.descontoValor }}
+              {{ venda_form.descontoValor.errors.as_text }}
+              <br>
+            </div>
+            <div class="general-input">
+              Porcentagem: {{ venda_form.descontoPorcentagem }}
+              {{ venda_form.descontoPorcentagem.errors.as_text }}
+              <br>
+            </div>
+          </fieldset>
+          <div style="width: 100%; float: left; text-align:center;">
+            {% if messages %}
+              {% for message in messages %}
+                <font style="font-size: 25px;">{{ message }}</font>
+              {% endfor %}
+              <br>
+            {% endif %}
+            {% if not viewMode %}
+              <input type="submit" value="Concluir" style="margin-right: 200px;" class='btn btn-primary'>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+  	</form>
+  </div>
+  <script type="text/javascript" src="/static/js/venda_produto_list.js"></script>
+{% endblock %}

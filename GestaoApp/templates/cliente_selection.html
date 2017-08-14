@@ -1,0 +1,71 @@
+{% extends 'menu.html' %}
+{% block forms %}
+  <a href="#"><button type="button" class="btn btn-lg btn-primary">Lista</button></a>
+  <a href="#"><button type="button" class="btn btn-lg btn-primary">Cadastro</button></a>
+  {% if form %}
+    <div class="panel panel-primary" style="max-width: 100%; width: 500px; margin: 0 auto;">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ header_text }}</h3>
+      </div>
+      <div class="panel-body">
+        <form method="POST" class="form-signin">{% csrf_token %}
+        	<div style="width: 100%; float: left; text-align: center;">
+        		Antes de realizar a compra selecione o cliente ou aperte em Prosseguir para realizar venda avulsa
+        	</div>
+          {{ form.cliente }}
+          <input type="submit" value="Prosseguir" class='btn btn-primary btn-lg' style="float: right; margin-top: 10px;">
+        </form>
+      </div>
+    </div>
+  {% endif %}
+  <div class="panel panel-primary" style="max-width: 100%; margin: 0 auto; width: 500px; margin-top: 20px;">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ subheader_text }}</h3>
+    </div>
+    <div class="panel-body">
+      <div style="float: left; width: 100%;">
+      {% if lista %}
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for elemento in lista %}
+                <tr>
+                  <td>{{ elemento.nome }}</td>
+                  <td>{{ elemento.email }}</td>
+                  <td>{{ elemento.telefone }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div style="width: 100%;">
+          <div style="width: 35%; float: left; height:10px; text-align: right;">
+            {% if lista.has_previous %}
+              <a href="?page={{ lista.previous_page_number }}">anterior</a>
+            {% endif %}
+          </div>
+          <div style="width: 30%; float: left; height:10px; text-align: center;">
+              Page {{ lista.number }} of {{ lista.paginator.num_pages }}
+          </div>
+          <div style="width: 35%; float: left; height:10px; text-align: left;">
+            {% if lista.has_next %}
+              <a href="?page={{ lista.next_page_number }}">próximo</a>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <div style="float: left; width: 100%">
+          <p style="text-align: center;">Não há cadastros.</p>
+        </div>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

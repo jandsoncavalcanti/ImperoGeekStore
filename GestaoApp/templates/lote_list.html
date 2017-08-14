@@ -1,0 +1,74 @@
+{% extends 'menu.html' %}
+{% block forms %}
+  <a href="{% url 'lista_lote' %}"><button type="button" class="btn btn-lg btn-primary">Lista</button></a>
+  <a href="{% url 'novo_lote' %}"><button type="button" class="btn btn-lg btn-primary">Cadastro</button></a>
+  {% if form %}
+    <div class="panel panel-primary" style="max-width: 100%; width: 900px; margin: 0 auto;">
+      <div class="panel-heading">
+        <h3 class="panel-title">Filtrar Lista de Lotes por Produto</h3>
+      </div>
+      <div class="panel-body">
+        <form method="POST" class="form-signin">{% csrf_token %}
+            {{ form.categoria }}
+            {{ form.franquia }}
+            {{ form.produto }}
+          <input type="submit" value="Filtrar" class='btn btn-primary btn-lg' style="float: right; margin-top: 10px;">
+        </form>
+      </div>
+    </div>
+  {% endif %}
+  <div class="panel panel-primary" style="max-width: 100%; margin: 0 auto; width: 900px; margin-top: 20px;">
+    <div class="panel-heading">
+      <h3 class="panel-title">Lista de Lotes</h3>
+    </div>
+    <div class="panel-body">
+      <div style="float: left; width: 100%;">
+      {% if lotes %}
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Criação</th>
+                <th>Quantidade Total</th>
+                <th>Editar</th>
+                <th>Remover</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for elemento in lotes %}
+                <tr>
+                  <td>{{ elemento.produto }}</td>
+                  <td>{{ elemento.datainsercao }}</td>
+                  <td>{{ elemento.quantidadetotal }}</td>
+                  <td><a href="{% url 'edita_lote' pk=elemento.id %}">editar</a></td>
+                  <td>{% if elemento.quantidadevendida == 0 %}<a href="#" onclick="ativarModalRemove({{elemento.id}})">remover</a>{% endif %}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div style="width: 100%;">
+          <div style="width: 35%; float: left; height:10px; text-align: right;">
+            {% if lotes.has_previous %}
+              <a href="?page={{ lotes.previous_page_number }}">anterior</a>
+            {% endif %}
+          </div>
+          <div style="width: 30%; float: left; height:10px; text-align: center;">
+              Page {{ lotes.number }} of {{ lotes.paginator.num_pages }}
+          </div>
+          <div style="width: 35%; float: left; height:10px; text-align: left;">
+            {% if lotes.has_next %}
+              <a href="?page={{ lotes.next_page_number }}">próximo</a>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <div style="float: left; width: 100%">
+          <p style="text-align: center;">Não há cadastros.</p>
+        </div>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

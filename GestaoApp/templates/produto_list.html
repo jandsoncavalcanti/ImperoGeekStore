@@ -1,0 +1,76 @@
+{% extends 'menu.html' %}
+{% block forms %}
+  <a href="{% url 'lista_produto' %}"><button type="button" class="btn btn-lg btn-primary">Lista</button></a>
+  <a href="{% url 'novo_produto' %}"><button type="button" class="btn btn-lg btn-primary">Cadastro</button></a>
+  {% if form %}
+    <div class="panel panel-primary" style="max-width: 100%; width: 700px; margin: 0 auto;">
+      <div class="panel-heading">
+        <h3 class="panel-title">Filtrar Lista de Produtos</h3>
+      </div>
+      <div class="panel-body">
+        <form method="POST" class="form-signin">{% csrf_token %}
+          {{ form.descricao }}
+          {{ form.franquia }}
+          {{ form.categoria }}
+          <input type="submit" value="Filtrar" class='btn btn-primary btn-lg' style="float: right; margin-top: 10px;">
+        </form>
+      </div>
+    </div>
+  {% endif %}
+  <div class="panel panel-primary" style="max-width: 100%; margin: 0 auto; width: 700px; margin-top: 20px;">
+    <div class="panel-heading">
+      <h3 class="panel-title">Lista de Produtos</h3>
+    </div>
+    <div class="panel-body">
+      <div style="float: left; width: 100%;">
+      {% if lista %}
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Categoria</th>
+                <th>Franquia</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Editar</th>
+                <th>Remover</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for elemento in lista %}
+                <tr>
+                  <td>{{ elemento.categoria }}</td>
+                  <td>{{ elemento.franquia }}</td>
+                  <td>{{ elemento.descricao }}</td>
+                  <td>{{ elemento.precoatual }}</td>
+                  <td><a href="{% url 'edita_produto' pk=elemento.id %}">editar</a></td>
+                  <td><a href="#" onclick="ativarModalRemove({{elemento.id}})">remover</a></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div style="width: 100%;">
+          <div style="width: 35%; float: left; height:10px; text-align: right;">
+            {% if lista.has_previous %}
+              <a href="?page={{ lista.previous_page_number }}">anterior</a>
+            {% endif %}
+          </div>
+          <div style="width: 30%; float: left; height:10px; text-align: center;">
+              Page {{ lista.number }} of {{ lista.paginator.num_pages }}
+          </div>
+          <div style="width: 35%; float: left; height:10px; text-align: left;">
+            {% if lista.has_next %}
+              <a href="?page={{ lista.next_page_number }}">próximo</a>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <div style="float: left; width: 100%">
+          <p style="text-align: center;">Não há cadastros.</p>
+        </div>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

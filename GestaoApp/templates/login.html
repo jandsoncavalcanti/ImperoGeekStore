@@ -1,0 +1,20 @@
+{% extends 'header.html' %}
+{% load static %}
+{% load extras %}
+{% block conteudo %}
+  <div style="float: left; width: 100%">
+    <form method="POST" class="form-signin" style="max-width: 330px;">{% csrf_token %}
+      <img src="{% static "image/logo.png" %}" alt="logo" style="max-width: 100%; margin: 0 auto;">
+      <div style="margin-top: 150px; ">
+        {% if form.errors %}
+          <div class="alert alert-danger" role="alert">
+            <strong>Usuário ou senha incorreto.</strong>
+          </div>
+        {% endif %}
+        {{ form.username|htmlattributes:"class : form-control, placeholder : Usuário"  }}
+        {{ form.password|htmlattributes:"class : form-control, placeholder : Senha" }}
+        <input type="submit" value="Concluir" class='btn btn-lg btn-primary btn-block'>
+      </div>
+    </form>
+  </div>
+{% endblock %}

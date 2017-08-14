@@ -1,0 +1,72 @@
+{% extends 'header.html' %}
+{% block conteudo %}
+  <div class="masthead" style="padding-top: 10px;">
+    <nav>
+      <ul class="nav nav-justified" style="float: left; max-width: 250px;">
+        <li><a href="{% url 'vendas' %}">Lista</a></li>
+        <li><a href="{% url 'novo_venda' %}">Cadastro</a></li>
+      </ul>
+    </nav>
+  </div>
+  {% if venda_search_form %}
+    <div style="float: left; width: 100%">
+      <h1 >LISTA DE VENDA</h1>
+      <form method="POST">{% csrf_token %}
+        <div style="width: 100%; margin: 0 auto; margin-bottom: 20px;">
+          <div class="general-input" style="text-align: center;">
+            Cliente:{{ venda_search_form.cliente }}
+            Produto:{{ venda_search_form.produto }}
+            <br>
+            <div style="width: 200px; margin: 0 auto;">
+              Data inicial:{{ venda_search_form.inicio }}
+            </div>
+            <div style="width: 200px; margin: 0 auto;">
+              Data final:{{ venda_search_form.fim }}
+            </div>
+            <input type="submit" value="Filtrar" class="btn btn-primary">
+          </div>
+        </div>
+      </form>
+    </div>
+  {% endif %}
+  {% if vendas %}
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>Data da venda</th>
+        <th>Visualizar</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for venda in vendas %}
+        <tr>
+          <td>{{ venda.cliente | default_if_none:"VENDA AVULSA" }}</td>
+          <td>{{ venda.dataCriacao }}</td>
+          <td><a href="{% url 'visualizar_venda' pk=venda.id %}">visualizar</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <span class="step-links">
+      {% if vendas.has_previous %}
+        <a href="?page={{ vendas.previous_page_number }}">anterior</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ vendas.number }} of {{ vendas.paginator.num_pages }}.
+      </span>
+
+      {% if vendas.has_next %}
+        <a href="?page={{ vendas.next_page_number }}">próximo</a>
+      {% endif %}
+    </span>
+  </div>
+  {% else %}
+    <div style="float: left; width: 100%">
+      <p style="text-align: center;">Não há vendas cadastrados.</p>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block conteudo %}
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static "image/logo2.png" %}" alt="logo" class="mainlogo"></a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li onclick="ativarElemento(this);" id="vendaButton"><a href="{% url 'venda_inicio' %}">Venda</a></li>
+          <li onclick="ativarElemento(this);" id="loteButton"><a href="{% url 'novo_lote' %}">Lote</a></li>
+          <li onclick="ativarElemento(this);" id="produtoButton"><a href="{% url 'novo_produto' %}">Produto</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Parâmetros<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'nova_categoria' %}">Categoria</a></li>
+              <li><a href="{% url 'novo_fabricante' %}">Fabricante</a></li>
+              <li><a href="{% url 'nova_franquia' %}">Franquia</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+
+  <div class="container">
+    <div style="float: left; width: 100%; min-height: 70px; margin-top: 70px;">
+      {% for message in messages %}
+        <div class="alert alert-success" role="alert"> 
+          <strong>{{ message }}</strong>
+        </div>
+      {% endfor %}
+      {% if form.errors %}
+        {% for field in form %}
+          {% if field.errors.strip %}
+            <div class="alert alert-danger">
+              <strong>{{ field.errors }}</strong>
+            </div>
+          {% endif %}
+        {% endfor %}
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            <strong>{{ form.non_field_errors }}</strong>
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {% if subform.errors %}
+        {% for field in subform %}
+          {% if field.errors.strip %}
+            <div class="alert alert-danger">
+              <strong>{{ field.errors }}</strong>
+            </div>
+          {% endif %}
+        {% endfor %}
+        {% if subform.non_field_errors %}
+          <div class="alert alert-danger">
+            <strong>{{ subform.non_field_errors }}</strong>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+    {% block forms %}
+    {% endblock %}
+
+    <!-- Modal -->
+    <div id="confirmModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog" style="max-width: 450px;">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="panel panel-primary" style="width: 100%; margin: 0 auto;">
+            <div class="panel-heading">
+              <h3 class="panel-title" style="text-align: center;">Confirmar remoção</h3>
+            </div>
+            <div class="panel-body">
+              Deseja realmente remover esse elemento?<br>
+              <div style="width: 100%;">
+                <input value="Confirmar" class='btn btn-primary' onclick="deleteElement()" style="float: left; margin-right: 20px; margin-top: 20px;" data-dismiss="modal" focus>
+                <input value="Cancelar" class='btn btn-primary' style="float: left; margin-top: 20px;" data-dismiss="modal">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="messageModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog" style="max-width: 450px;">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="panel panel-primary" style="width: 100%; margin: 0 auto;">
+            <div class="panel-heading">
+              <h3 class="panel-title" style="text-align: center;">Mensagem</h3>
+            </div>
+            <div class="panel-body">
+              <div  id="mensagem"></div>
+              <input value="Fechar" class='btn btn-primary' style="float: left; margin-top: 20px;" data-dismiss="modal">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
+  <script type="text/javascript">
+    var delElement;
+
+    $(document).ready(function() {
+      if (location.pathname.indexOf("produto") > -1) {
+        $("#produtoButton").addClass("active");
+      } else if (location.pathname.indexOf("lote") > -1) {
+        $("#loteButton").addClass("active");
+      } else if (location.pathname.indexOf("venda") > -1) {
+        $("#vendaButton").addClass("active");
+      }
+    });
+
+    function ativarElemento(elmnt) {
+      elmnt.classList.add('active');
+    }
+
+    function ativarModalRemove(elmnt) {
+      delElement = elmnt;
+      $('#confirmModal').modal('show');
+    }
+
+    function deleteElement() {
+        $.ajax({
+          url: '{{remover_url}}',
+          data: {'elemento': delElement},
+          dataType: 'json',
+          success: function (data) {
+            $('#confirmModal').modal('hide');
+            if (!data.booleano) {
+              $('#messageModal').modal('show');
+              document.getElementById("mensagem").innerHTML = data.mensagem;
+            } else {
+              location.reload(true);
+            }
+          }
+        });
+    }
+  </script>
+{% endblock %}
