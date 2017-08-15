@@ -1,3 +1,15 @@
+#Just making the project be lighter to commit
+
+*.pyc
+
+ImperioGeekStore/
+
+# Is better to exclude it from migrations
+
+GestaoApp/migrations
+
+# The files below is just in case to begin to use but im not using at the moment
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
